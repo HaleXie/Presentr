@@ -24,11 +24,11 @@ public enum ModalSize {
     case `default`
     case half
     case full
-	case fluid(percentage: Float)
-	case sideMargin(value: Float)
+    case fluid(percentage: Float)
+    case sideMargin(value: Float)
     case custom(size: Float)
     case customOrientation(sizePortrait: Float, sizeLandscape: Float)
-
+    
     /**
      Calculates the exact width value for the presented view controller.
      
@@ -47,6 +47,7 @@ public enum ModalSize {
         case .custom(let size):
             return size
         case .customOrientation(let sizePortrait, let sizeLandscape):
+#if os(iOS)
             switch UIDevice.current.orientation {
             case .portrait, .portraitUpsideDown:
                 return min(Float(UIScreen.main.bounds.width), sizePortrait)
@@ -55,13 +56,18 @@ public enum ModalSize {
             default:
                 return min(Float(UIScreen.main.bounds.width), sizePortrait)
             }
+#elseif os(visionOS)
+            // return full
+            return Float(parentSize.width)
+#endif
+
         case .fluid(let percentage):
             return floorf(Float(parentSize.width) * percentage)
         case .sideMargin(let value):
             return floorf(Float(parentSize.width) - value * 2.0)
         }
     }
-
+    
     /**
      Calculates the exact height value for the presented view controller.
      
@@ -80,6 +86,7 @@ public enum ModalSize {
         case .custom(let size):
             return size
         case .customOrientation(let sizePortrait, let sizeLandscape):
+#if os(iOS)
             switch UIDevice.current.orientation {
             case .portrait, .portraitUpsideDown:
                 return min(Float(UIScreen.main.bounds.height), sizePortrait)
@@ -88,6 +95,10 @@ public enum ModalSize {
             default:
                 return min(Float(UIScreen.main.bounds.height), sizePortrait)
             }
+#elseif os(visionOS)
+            // return full
+            return Float(parentSize.height)
+#endif
         case .fluid(let percentage):
             return floorf(Float(parentSize.height) * percentage)
         case .sideMargin(let value):

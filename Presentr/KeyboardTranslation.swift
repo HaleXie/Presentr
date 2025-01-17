@@ -12,6 +12,8 @@ import UIKit
 public enum KeyboardTranslationType {
 
     case none
+#if os(iOS)
+
     case moveUp
     case compress
     case stickToTop
@@ -54,10 +56,12 @@ public enum KeyboardTranslationType {
             return presentedFrame
         }
     }
+#endif
 }
 
-// MARK: Notification + UIKeyboardInfo
 
+// MARK: Notification + UIKeyboardInfo
+#if os(iOS)
 extension Notification {
 
     /// Gets the optional CGRect value of the UIKeyboardFrameEndUserInfoKey from a UIKeyboard notification
@@ -82,3 +86,4 @@ extension Notification {
         return (self.userInfo?[durationKey] as? NSNumber)?.doubleValue
     }
 }
+#endif

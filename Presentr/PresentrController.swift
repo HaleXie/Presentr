@@ -134,10 +134,11 @@ class PresentrController: UIPresentationController, UIAdaptivePresentationContro
         if dismissOnSwipe {
             setupDismissOnSwipe()
         }
-
+#if os(iOS)
         if shouldObserveKeyboard {
             registerKeyboardObserver()
         }
+#endif
     }
 
     // MARK: - Setup
@@ -200,7 +201,9 @@ class PresentrController: UIPresentationController, UIAdaptivePresentationContro
         }
     }
     
+    #if os(iOS)
     fileprivate func registerKeyboardObserver() {
+        
         #if swift(>=4.2)
         let keyboardWasShownKey = UIResponder.keyboardWillShowNotification
         let keyboardWillHideKey = UIResponder.keyboardWillHideNotification
@@ -225,7 +228,7 @@ class PresentrController: UIPresentationController, UIAdaptivePresentationContro
         NotificationCenter.default.removeObserver(self, name: keyboardWasShownKey, object: nil)
         NotificationCenter.default.removeObserver(self, name: keyboardWillHideKey, object: nil)
     }
-
+    #endif
 }
 
 // MARK: - UIPresentationController
@@ -402,9 +405,11 @@ extension PresentrController {
         }
 
         if gesture.state == .ended {
+            #if os(iOS)
             if shouldObserveKeyboard {
                 removeObservers()
             }
+            #endif
             presentingViewController.dismiss(animated: dismissAnimated, completion: nil)
         }
     }
@@ -472,7 +477,7 @@ extension PresentrController {
 }
 
 // MARK: - Keyboard Handling
-
+#if os(iOS)
 extension PresentrController {
 
     @objc func keyboardWasShown(notification: Notification) {
@@ -501,3 +506,4 @@ extension PresentrController {
     }
 
 }
+#endif
