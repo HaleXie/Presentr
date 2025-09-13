@@ -7,6 +7,8 @@
 // Inspired by https://stackoverflow.com/questions/12565204/smooth-horizontal-flip-using-catransform3dmakerotation
 
 import Foundation
+import QuartzCore
+import UIKit
 
 public class FlipHorizontalAnimation: PresentrAnimation {
     
